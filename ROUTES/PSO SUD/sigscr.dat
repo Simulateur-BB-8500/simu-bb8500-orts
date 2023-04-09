@@ -1,0 +1,2842 @@
+//feux francais
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CvNain
+	extern float	block_state ();
+	extern float	def_draw_state ();
+	extern float	sig_feature ();
+	extern float	draw_state;
+	extern float	enabled;
+
+	float		mUser1;
+	float		mDraw;
+
+	mUser1	= sig_feature (SIGFEAT_USER1);
+
+	if (!enabled || block_state() !=# BLOCK_CLEAR )
+		if ( !enabled || block_state() ==# BLOCK_JN_OBSTRUCTED || mUser1)
+			mDraw = SIGASP_STOP;	
+		else
+			mDraw = SIGASP_CLEAR_2;
+	else
+			mDraw = SIGASP_CLEAR_2;
+
+	draw_state = def_draw_state (mDraw);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT arret
+
+// Rouge Heurtoire
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+
+	state = SIGASP_STOP;
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT BNSF3Light
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate 	= sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP_AND_PROCEED;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED )
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else if (next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_CLEAR_2 )
+		{
+			state = SIGASP_APPROACH_3;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT SAVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+	
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate	= sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+	if ( // !enabled ||					
+		block_state() !=# BLOCK_CLEAR )						
+	{
+		if (has_gradient_plate)
+			state = SIGASP_RESTRICTING;
+		else //if (has_number_plate)
+			state = SIGASP_STOP_AND_PROCEED;
+		//else
+		//	state = SIGASP_STOP;
+	}
+/// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT SSAVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP_AND_PROCEED;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT SAAVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT SAVLVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_CLEAR_2 )
+		{
+			state = SIGASP_APPROACH_3;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT R2
+
+// Feux Ralentissement 20m/h = 30km/h
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate = sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP ||
+			next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else // if (next_state ==# SIGASP_RESTRICTING)
+		
+			state = SIGASP_APPROACH_1;		
+	
+	}
+
+// Get draw state
+
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT R40
+
+// Feux Ralentissement 40m/h = 60km/h
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate = sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP ||
+			next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if (next_state ==# SIGASP_RESTRICTING)
+		
+			state = SIGASP_APPROACH_1;		
+	
+		else // if (next_state ==# SIGASP_APPROACH_1)
+		
+			state = SIGASP_APPROACH_2;		
+	
+	}
+
+
+// Get draw state
+
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT Carre_violet
+
+// BNSF 2 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate	= sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())							// Switch not set as per link?
+	{
+		if (has_gradient_plate)
+			state = SIGASP_RESTRICTING;
+		
+		else
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else // if (next_state ==# SIGASP_APPROACH_1) ||
+			//	next_state ==# SIGASP_APPROACH_2 ||
+			//	next_state ==# SIGASP_CLEAR_2)
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+// Show the restricting indication with flashing red light if this signal does not
+// have a gradient plate (it will be a constant red otherwise).
+	if (state ==# SIGASP_RESTRICTING &&
+		!has_gradient_plate)
+	{
+		draw_state = 1;					// (Draw state index from signal config)
+	}
+
+
+
+// Get draw state
+
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT Carre
+
+// SNCF Carré 5 feux
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAAVL
+
+// SNCF Carré 5 feux
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Jaune Clignotant -> Avertissement Reduit
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else if ( next_Cstate ==# SIGASP_APPROACH_1 )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAVLVL
+
+// SNCF Carré 5 feux
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Vert Clignotant -> Préannonce
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else if ( next_Cstate ==# SIGASP_APPROACH_1 || next_Cstate ==# SIGASP_APPROACH_2 || next_Cstate ==# SIGASP_CLEAR_2 )
+		{
+			state = SIGASP_APPROACH_3;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT Ralentissement
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 10
+// 2 feux Orange horizontaux -> Ralentissement 30
+// 2 feux Orange clignotant horizontaux -> Ralentissement 60
+// 1 feu Orange -> Avertissement
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAAR60VL
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune clignotant horizontaux -> Ralentissement 60
+// 1 feu Jaune -> Avertissement
+// 1 feu Jaune clignotant -> Avertissement Reduit
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )			
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else if ( next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAR60VLVL
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 10
+// 2 feux Orange clignotant horizontaux -> Ralentissement 60
+// 1 feu Orange -> Avertissement
+// 1 feu Vert clignotant -> Preannonce
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )			
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAR30VL
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 10
+// 2 feux Jaune horizontaux -> Ralentissement 30
+// 1 feu Jaune -> Avertissement
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAAR30VL
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune horizontaux -> Ralentissement 30
+// 1 feu Jaune -> Avertissement
+// 1 feu Jaune clignotant -> Avertissement Reduit
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )			
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else if ( next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAR30VLVL
+
+// SNCF Ralentissement 7 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune horizontaux -> Ralentissement 30
+// 1 feu Jaune -> Avertissement
+// 1 feu Vert clignotant -> Preannonce
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_CLEAR_2;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )			
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT Rappel_Ralentissement
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune clignotant Verticaux -> Rappel de Ralentissement 60
+// 1 feu jaune -> Avertissement
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR60AAVL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune clignotant Verticaux -> Rappel de Ralentissement 60
+// 1 feu Jaune -> Avertissement
+// 1 feu Jaune clignotant -> Avertissement Reduit
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if (next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_RESTRICTING || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR60AVLVL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune clignotant Verticaux -> Rappel de Ralentissement 60
+// 1 feu Jaune -> Avertissement
+// 1 feu Vert clignotant -> Préannonce
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if (next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_RESTRICTING || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR30AVL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux -> Rappel de Ralentissement 30
+// 1 feu jaune -> Avertissement
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR30AAVL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux -> Rappel de Ralentissement 30
+// 1 feu Jaune -> Avertissement
+// 1 feu Jaune clignotant -> Avertissement Reduit
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if (next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_RESTRICTING || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR30AVLVL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux -> Rappel de Ralentissement 30
+// 1 feu Jaune -> Avertissement
+// 1 feu Vert clignotant -> Préannonce
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if (next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_RESTRICTING || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR30AR30VL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux -> Rappel de Ralentissement 30
+// 1 feu jaune -> Avertissement
+// 2 feux Jaune horizontaux -> Ralentissement 30
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==#SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			} 
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR30AAR60VL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux Clignotant -> Rappel de Ralentissement 60
+// 1 feu jaune -> Avertissement
+// 1 feu jaune Clignotant -> Avertissement Reduit
+// 2 feux Jaune horizontaux Clignotant -> Ralentissement 60
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==#SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			} 
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR60AR30VL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux Clignotant -> Rappel de Ralentissement 60
+// 1 feu jaune -> Avertissement
+// 2 feux Jaune horizontaux -> Ralentissement 30
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==#SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			} 
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT CSRR60AAR60VL
+
+// SNCF Rappel Ralentissement 9 feux
+
+// 2 feux Rouges -> Arret Non Franchissable
+// 1 feu Rouge -> Arret Franchissable 30
+// 2 feux Jaune Verticaux Clignotant -> Rappel de Ralentissement 60
+// 1 feu jaune -> Avertissement
+// 1 feu jaune Clignotant -> Avertissement Reduit
+// 2 feux Jaune horizontaux Clignotant -> Ralentissement 60
+// 1 feu vert -> Voie Libre
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED  )
+			{
+				state = SIGASP_APPROACH_1;
+			}
+			else if ( next_Rstate ==# SIGASP_CLEAR_2 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			} 
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 )
+			{
+				state = SIGASP_APPROACH_3;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_1;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+			if ( next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED || next_Rstate ==# SIGASP_CLEAR_2 )			
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT BAPR-SVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP_AND_PROCEED;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		state = SIGASP_CLEAR_1;
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT BAPR-AVL
+
+// BNSF 3 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMBIF160
+
+// Signalisation LGV Biff Zone 160
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+			if (next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED)
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_2 || next_Rstate ==# SIGASP_APPROACH_3 )
+			{
+				state = SIGASP_CLEAR_1;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+				state = SIGASP_STOP_AND_PROCEED;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMBIF160FZ270
+
+// Signalisation LGV Biff Zone 160 Fin de Zone 270
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+			if (next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED)
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else
+			{
+				state = SIGASP_APPROACH_3;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+				state = SIGASP_STOP_AND_PROCEED;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMBIF160FZ270DS
+
+// Signalisation LGV Biff Zone 160 Fin de Zone 270 Double Signalisation
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+			if (next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED)
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else
+			{
+				state = SIGASP_APPROACH_3;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+				state = SIGASP_STOP_AND_PROCEED;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMFZ160
+
+// Signalisation LGV Fin Zone 160
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		state = SIGASP_STOP_AND_PROCEED;
+		
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT TVM220
+
+// Signalisation LGV 220
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_1;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMBIF220
+
+// Signalisation LGV Biff Zone 160
+
+	extern float	block_state ();
+	extern float	route_set (); 
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float	next_Rstate;	
+
+
+// Bloc occupé ou Obstrué STOP.
+
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+
+// Bloc Libre
+	else 
+	{
+		if ( route_set() ) //vers voie principale
+		{
+			next_Rstate = next_sig_lr (SIGFN_NORMAL);
+
+			if (next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED)
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_1 || next_Rstate ==# SIGASP_RESTRICTING )
+			{
+				state = SIGASP_APPROACH_2;
+			}
+			else if ( next_Rstate ==# SIGASP_APPROACH_2 || next_Rstate ==# SIGASP_APPROACH_3 )
+			{
+				state = SIGASP_CLEAR_1;
+			}
+			else
+			{
+				state = SIGASP_CLEAR_2;
+			}
+		}
+		// vers voie secondaire
+		else
+		{
+			if (next_Rstate ==# SIGASP_STOP || next_Rstate ==# SIGASP_STOP_AND_PROCEED)
+			{
+				state = SIGASP_RESTRICTING;
+			}
+			else
+			{
+				state = SIGASP_APPROACH_1;
+			}
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMFZ220
+
+// Signalisation LGV Fin Zone 270
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_1;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVM270DS
+
+// Signalisation LGV pour Double Signalisation 270
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_RESTRICTING )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_3;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVM270
+
+// Signalisation LGV 270
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_RESTRICTING )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_3;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVMFZ270
+
+// Signalisation LGV Fin Zone 270
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_RESTRICTING )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_3;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT TVM300
+
+// Signalisation LGV pour 300
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			next_state;
+
+	// If required, show the appropriate 'stop' indication.
+	if (!enabled ||						// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())					// Switch not set as per link?
+	{
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP || next_state ==# SIGASP_STOP_AND_PROCEED)
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_1 || next_state ==# SIGASP_RESTRICTING )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else if ( next_state ==# SIGASP_APPROACH_2 || next_state ==# SIGASP_APPROACH_3 )
+
+		{
+			state = SIGASP_CLEAR_1;
+		}
+		else
+
+		{
+			state = SIGASP_CLEAR_2;
+		}
+	}
+
+
+// Get draw state
+	draw_state = def_draw_state (state);
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSAVLVLSDS
+
+// SNCF Carré 5 feux Sortie Double Signalisation
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Vert Clignotant -> Préannonce
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_Cstate ==# SIGASP_APPROACH_1 || next_Cstate ==# SIGASP_APPROACH_2 || next_Cstate ==# SIGASP_CLEAR_2 )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CENTLGV160
+
+// SNCF Carré 5 feux
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP_AND_PROCEED;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_Cstate ==# SIGASP_STOP )
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CSORTLGV160
+
+// SNCF Carré 5 feux Sortie Double Signalisation
+
+//2 feux Rouges -> Arret Non Franchissable
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Vert Clignotant -> Préannonce
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_STOP;
+		}
+		else
+		{
+			state = SIGASP_STOP_AND_PROCEED;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT CENTLGV220
+
+// SNCF SAVLVL Entrée LGV 220
+
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Vert Clignotant -> Préannonce
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_Cstate ==# SIGASP_RESTRICTING || next_Cstate ==# SIGASP_APPROACH_1 )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_CLEAR_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT SSORTLGV220
+
+// SNCF SAVLVL Sortie LGV 220
+
+//1 feu Rouge -> Arret Franchissable 30
+//1 feu Jaune -> Avertissement 30
+//1 feu Vert Clignotant -> Préannonce
+//1 feu vert -> Voie Libre
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set  (); 
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled; 
+
+	float			next_Cstate;
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR)	 				// Block ahead not clear?
+	{	
+		if (block_state() ==# BLOCK_JN_OBSTRUCTED)					// Prochain Bloc Obstrué
+		{
+			state = SIGASP_STOP;	
+		}
+		else
+		{
+			state = SIGASP_STOP;
+		}
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_Cstate = next_sig_lr (SIGFN_NORMAL);
+
+		if ( next_Cstate ==# SIGASP_STOP ||next_Cstate ==# SIGASP_STOP_AND_PROCEED  )
+		{
+			state = SIGASP_RESTRICTING;
+		}
+		else if ( next_Cstate ==# SIGASP_APPROACH_1 || next_Cstate ==# SIGASP_APPROACH_2 || next_Cstate ==# SIGASP_CLEAR_2 )
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else
+		{
+			state = SIGASP_APPROACH_1;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+/////////////////////////////////////////////////////////////////////////////
+SCRIPT BNSF2Light
+
+// BNSF 2 light signal head
+
+	// Use SIG_EXTERNS 'macro' instead?..
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	sig_feature ();
+	extern float	def_draw_state ();
+float	state;
+	extern float	draw_state;
+	extern float	enabled;
+
+	float			has_number_plate;
+	float			has_gradient_plate;
+	float			next_state;
+
+	has_number_plate	= sig_feature (SIGFEAT_NUMBER_PLATE);
+	has_gradient_plate	= sig_feature (SIGFEAT_GRADIENT_PLATE);
+
+// If required, show the appropriate 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())							// Switch not set as per link?
+	{
+		if (has_gradient_plate)
+			state = SIGASP_RESTRICTING;
+		else if (has_number_plate)
+			state = SIGASP_STOP_AND_PROCEED;
+		else
+			state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP ||
+			next_state ==# SIGASP_STOP_AND_PROCEED ||
+			next_state ==# SIGASP_RESTRICTING)
+		{
+			state = SIGASP_APPROACH_1;
+		}
+		else // if (next_state ==# SIGASP_APPROACH_1) ||
+			//	next_state ==# SIGASP_APPROACH_2 ||
+			//	next_state ==# SIGASP_CLEAR_2)
+		{
+			state = SIGASP_APPROACH_2;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+// Show the restricting indication with flashing red light if this signal does not
+// have a gradient plate (it will be a constant red otherwise).
+	if (state ==# SIGASP_RESTRICTING &&
+		!has_gradient_plate)
+	{
+		draw_state = 1;					// (Draw state index from signal config)
+	}
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT JP3Light
+
+// Japanese 3 light signal head
+
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+	float			next_state;
+
+// If required, show the 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())							// Switch not set as per link?
+	{
+		state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP)
+		{
+			state = SIGASP_APPROACH_3;
+		}
+		else // if (next_state ==# SIGASP_APPROACH_3 ||
+			//   next_state ==# SIGASP_CLEAR_2)
+		{
+			state = SIGASP_CLEAR_2;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+///////////////////////////////////////////////////////////////////////////////
+SCRIPT JP4Light
+
+// Japanese 4 light signal head
+
+	extern float	block_state ();
+	extern float	route_set ();
+	extern float	next_sig_lr ();
+	extern float	def_draw_state ();
+	extern float	state;
+	extern float	draw_state;
+	extern float	enabled;
+	float			next_state;
+
+// If required, show the 'stop' indication.
+	if (!enabled ||								// Not enabled/cleared to show natural state?
+		block_state() !=# BLOCK_CLEAR ||		// Block ahead not clear?
+		!route_set())							// Switch not set as per link?
+	{
+		state = SIGASP_STOP;
+	}
+// Signal head is enabled and the block ahead is clear - update based on state of
+// next signal head.
+	else
+	{
+		next_state = next_sig_lr (SIGFN_NORMAL);
+
+		if (next_state ==# SIGASP_STOP)
+		{
+			state = SIGASP_APPROACH_2;
+		}
+		else if (next_state ==# SIGASP_APPROACH_2)
+		{
+			state = SIGASP_APPROACH_3;
+		}	
+		else //if (next_state ==# SIGASP_APPROACH_3 ||
+			//   next_state ==# SIGASP_CLEAR_2)
+		{
+			state = SIGASP_CLEAR_2;
+		}
+	}
+
+// Get draw state
+	draw_state = def_draw_state (state);
+
+
+
+
+
+//End of File !
